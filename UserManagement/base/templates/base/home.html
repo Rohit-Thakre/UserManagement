@@ -6,5 +6,31 @@
 {%block content %}
 
 <h1>Home test</h1>
+{% for post in posts %}
+<div class="card">
+    <div class="card-header">
+        <span>@{{post.creator}}</span>
+        <span style="margin-left: 80%;">
+            <button class="btn-sm btn-primary"><a href="{% url 'update-post' post.id  %}"
+                    style="text-decoration: none; color: white;">Update</a></button>
 
+            <button class="btn-sm btn-danger"><a href=""
+                    style="text-decoration: none; color: white;">Delete</a></button>
+
+
+        </span>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">{{post.title}}</h5>
+        <p class="card-text">{{post.content}}</p>
+        <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+    </div>
+    <div class="card-footer text-muted">
+        <!-- {{post.created|timesince}} -->
+        {{post.created}}
+    </div>
+</div>
+<br>
+
+{% endfor %}
 {%endblock %}

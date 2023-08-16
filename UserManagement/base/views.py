@@ -1,31 +1,18 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout , authenticate
-from .forms import UserCreationForm
+from .forms import UserCreationForm, CreatePost
 from django.contrib.auth.models import User
-
+from .models import Post
 
 def home(request): 
-    return render(request,'base/home.html')
+    posts = Post.objects.all()
+    print(posts)
+
+    context = {'posts': posts}
+    return render(request,'base/home.html' ,context)
 
 
 
-
-# def UserLogin(request):
-#     if request.method == 'POST': 
-#         email = request.POST['email']
-#         pas = request.POST['pas']
-#         # print(email, pas)
-
-#         user_obj = User.objects.filter(email = email)
-#         # print(user_obj)
-#         if user_obj: 
-#             user = authenticate(request, email = email,password = pas) 
-#             print('error')
-#             login(request, user)
-#             return redirect('home')
-
-
-#     return render(request, 'base/login.html')
 
 def UserLogin(request): 
     if request.method == 'POST':
@@ -73,3 +60,36 @@ def sign_up(request):
 def sign_out(request):
     logout(request)
     return redirect('home')
+
+
+
+def post(request): 
+
+    form = CreatePost()
+
+    if request.method == "POST": 
+        form = CreatePost(request.POST)
+
+        if form.is_valid(): 
+          
+            form.save(commit = False)
+            form.creator = request.user
+            form.save()
+            return redirect('home')
+    
+    return render(request, 'base/post.html', {"form": form})
+
+
+
+def update_post(request, key): 
+    data = Post.objects.get(id=key)
+    form = CreatePost(instance= data)
+
+    if request.method == 'POST': 
+        form = CreatePost(request.POST, instance = data)
+        form.save()
+        return redirect('home')
+
+
+    context = {'form':form}
+    return render(request, 'base/post.html', context)
