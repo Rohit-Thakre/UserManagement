@@ -1,0 +1,42 @@
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+{% block title %} sign_up {% endblock %}
+
+
+
+{% block content %}
+
+
+<div class="card mt-3">
+    <div class="card-header">
+        <span>@{{post.creator}}</span>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">{{post.title}}</h5>
+        <p class="card-text">{{post.content}}</p>
+        <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+    </div>
+    <div class="card-footer text-muted">
+        <!-- {{post.created|timesince}} -->
+        {{post.created}}
+    </div>
+</div>
+
+
+<button class="btn btn-primary mt-3"><a href="{{request.META.HTTP_REFERER}}"
+        style="text-decoration: none; color:  white;">GO
+        BACK
+    </a></button>
+
+<form action="" method="POST" style="display: inline-block;">
+
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger mt-3 "><a href="{{request.META.HTTP_REFERER}}"
+            style="text-decoration: none; color:  white;">
+            DELETE
+        </a></button>
+</form>
+
+
+
+{% endblock %}

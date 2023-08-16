@@ -6,7 +6,6 @@ from .models import Post
 
 def home(request): 
     posts = Post.objects.all()
-    print(posts)
 
     context = {'posts': posts}
     return render(request,'base/home.html' ,context)
@@ -93,3 +92,16 @@ def update_post(request, key):
 
     context = {'form':form}
     return render(request, 'base/post.html', context)
+
+
+
+
+def delete_post(request, key): 
+    post = Post.objects.get(id=key)
+    
+
+    if request.method == "POST":
+        post.delete()
+        print('post deleted ')
+        return redirect('home')
+    return render(request, 'base/delete.html', {'post': post})
