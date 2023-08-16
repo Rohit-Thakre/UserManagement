@@ -16,7 +16,19 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 class UserCreationForm(UserCreationForm):
+    username = forms.CharField(required=True)
+    email = forms.EmailField(required = True)
     class Meta:  
         model = User
         # fields = '__all__'
-        fields = [ 'email', 'password1','password2']
+        fields = [ 'username','email', 'password1','password2']
+
+
+
+class UserLogin(forms.ModelForm):
+    email = forms.EmailField(required=True)
+    password = forms.CharField(widget= forms.PasswordInput)
+    
+    class Meta: 
+        # model = User
+        fields = ['email', 'password']
