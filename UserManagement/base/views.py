@@ -74,7 +74,9 @@ def post(request):
           
             form.save(commit = False)
             form.creator = request.user
-            form.save()
+            post = form.save(commit=False)
+            post.creator = request.user
+            post.save()
             return redirect('home')
     
     return render(request, 'base/post.html', {"form": form})

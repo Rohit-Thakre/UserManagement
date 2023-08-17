@@ -41,5 +41,5 @@ class CreatePost(forms.ModelForm):
 
     class Meta: 
         model = Post
-        # fields = ['title', 'content']
-        fields = '__all__'
+        fields = ['title', 'content']
+        # fields = '__all__'
