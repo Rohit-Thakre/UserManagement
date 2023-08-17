@@ -1,13 +1,20 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout , authenticate
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from .forms import UserCreationForm, CreatePost
 from django.contrib.auth.models import User
 from .models import Post
 
 def home(request): 
-    posts = Post.objects.all()
-
+    # posts = Post.objects.all()
+    q= request.GET.get('q') 
+    q = request.GET.get('q') if q else ""
+    posts = Post.objects.filter(
+        Q(creator__username__icontains=q)| 
+        Q(title__icontains=q) | 
+        Q(content__icontains=q)
+        )
     context = {'posts': posts}
     return render(request,'base/home.html' ,context)
 
