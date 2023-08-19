@@ -12,7 +12,8 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <nav class="navbar navbar-fixed-top navbar-expand-md navbar-dark bg-dark "
+            style="position: fixed; top: 0; z-index: 10000; width: 100%;">
             <div class="container-fluid">
                 <div>
                     <ul class="navbar-nav">
@@ -46,7 +47,10 @@
                 </div>
             </div>
         </nav>
+        <!-- for empty space line -->
+        <div style="height: 40px;"></div>
         <div class="container">
+            <br>
             {% block content %}
 
             {% endblock %}
