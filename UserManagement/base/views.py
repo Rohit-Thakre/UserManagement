@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth import login, logout , authenticate
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -89,15 +89,19 @@ def post(request):
     return render(request, 'base/post.html', {"form": form})
 
 
-
+@login_required(login_url='login')
 def update_post(request, key): 
-    data = Post.objects.get(id=key)
-    form = CreatePost(instance= data)
 
-    if request.method == 'POST': 
-        form = CreatePost(request.POST, instance = data)
-        form.save()
+    data = Post.objects.get(id=key)
+    if request.user != data.creator and not(request.user.is_superuser): 
         return redirect('home')
+    if request.user ==  data.creator or request.user.is_superuser:
+        form = CreatePost(instance= data)
+
+        if request.method == 'POST': 
+            form = CreatePost(request.POST, instance = data)
+            form.save()
+            return redirect('home')
 
 
     context = {'form':form}
@@ -105,13 +109,28 @@ def update_post(request, key):
 
 
 
-
+@login_required(login_url='login')
 def delete_post(request, key): 
-    post = Post.objects.get(id=key)
-    
 
-    if request.method == "POST":
-        post.delete()
-        print('post deleted ')
+    post = Post.objects.get(id=key)
+    if request.user != post.creator  and not(request.user.is_superuser): 
         return redirect('home')
+    if request.user ==  post.creator or request.user.is_superuser:
+        if request.method == "POST":
+            post.delete()
+            print('post deleted ')
+            return redirect('home')
     return render(request, 'base/delete.html', {'post': post})
+
+
+@login_required(login_url='login')
+def profile(request, key):
+
+    user  = User.objects.get(id=key) 
+    total_post = Post.objects.filter(creator = key)
+    total_post = total_post.count()
+
+    print(total_post)
+
+    content = {'user': user, 'total_post': total_post}
+    return render(request, 'base/profile.html' , content)
